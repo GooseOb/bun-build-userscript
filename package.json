@@ -1,6 +1,6 @@
 {
   "name": "bun-build-userscript",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "author": "GooseOb",
   "description": "Building index.ts and header.txt into one js-file via bun",
   "module": "index.ts",
@@ -16,6 +16,9 @@
     "index.ts",
     "README.md"
   ],
+  "scripts": {
+    "publish": "(sed 's/\\r$//' index.ts > .tmp) && (mv .tmp index.ts) && npm publish"
+  },
   "devDependencies": {
     "bun-types": "latest"
   },

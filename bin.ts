@@ -2,6 +2,7 @@
 
 import { watch } from "node:fs/promises"
 import { build, print } from './index.ts';
+import * as path from 'path';
 
 let indexOfOutputOption = process.argv.indexOf('--out') + 1;
 if (indexOfOutputOption === process.argv.length) {
@@ -9,8 +10,17 @@ if (indexOfOutputOption === process.argv.length) {
 	process.exit(1);
 }
 
+let indexOfConfigOption = process.argv.indexOf('--cfg') + 1;
+if (indexOfConfigOption === process.argv.length) {
+	print('please, specify the config path');
+	process.exit(1);
+}
+
 const config = {
-	naming: indexOfOutputOption ? process.argv[indexOfOutputOption] : 'dist.js'
+	...(indexOfConfigOption ? (await import(
+		path.resolve(process.cwd(), process.argv[indexOfConfigOption])
+	)).default : {}),
+	naming: indexOfOutputOption ?  process.argv[indexOfOutputOption] : 'dist.js'
 };
 
 await build(config);

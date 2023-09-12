@@ -25,3 +25,10 @@ Specify the output path
 ```bash
 bun build-userscript --out index.js
 ```
+
+## --cfg
+Pass custom bun config
+```bash
+bun build-userscript --cfg config.ts
+```
+Should be exported by `export default`

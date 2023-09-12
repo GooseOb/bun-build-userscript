@@ -1,13 +1,13 @@
 {
   "name": "bun-build-userscript",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "author": "GooseOb",
   "description": "Building index.ts and header.txt into one js-file via bun",
   "module": "index.ts",
   "type": "module",
   "main": "index.ts",
   "bin": {
-    "build-userscript": "index.ts"
+    "build-userscript": "bin.ts"
   },
   "repository": {
     "type": "git",

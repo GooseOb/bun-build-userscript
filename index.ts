@@ -17,7 +17,9 @@ if (indexOfOutputOption === process.argv.length) {
 const naming = indexOfOutputOption ? process.argv[indexOfOutputOption] : 'dist.js';
 
 const postprocess = (text: string) =>
-	text.replace(/(?:\\u\S{4})+/g, ($0) => JSON.parse(`"${$0}"`));
+	'\n(function(){' +
+	text.replace(/(?:\\u\S{4})+/g, ($0) => JSON.parse(`"${$0}"`)) +
+	'})()';
 
 const build = () =>
 	Bun.build({
@@ -28,7 +30,7 @@ const build = () =>
 		const {path} = output.outputs[0];
 		await Bun.write(
 			path,
-			await readFile('header.txt', 'utf-8') + '\n' +
+			await readFile('header.txt', 'utf-8') +
 			postprocess(await readFile(path, 'utf-8')));
 		print(`done in ${performance.now() - startTime} ms`);
 	})

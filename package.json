@@ -1,0 +1,20 @@
+{
+  "name": "bun-build-userscript",
+  "version": "1.0.0",
+  "author": "GooseOb",
+  "module": "index.ts",
+  "type": "module",
+  "bin": {
+    "build-userscript": "./index.ts"
+  },
+  "files": [
+    "index.ts",
+    "README.md"
+  ],
+  "devDependencies": {
+    "bun-types": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  }
+}

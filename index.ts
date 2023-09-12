@@ -13,7 +13,7 @@ const postprocess = (text: string) =>
 export const build = (config: Partial<BuildConfig>) => {
 	const startTime = performance.now();
 
-	Bun.build({
+	return Bun.build({
 		entrypoints: ['index.ts'],
 		outdir: '.',
 		...config

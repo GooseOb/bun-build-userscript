@@ -17,7 +17,7 @@
     "README.md"
   ],
   "scripts": {
-    "publish": "(sed 's/\\r$//' index.ts > .tmp) && (mv .tmp index.ts) && npm publish"
+    "prepublishOnly": "(sed 's/\\r$//' index.ts > .tmp) && (mv .tmp index.ts) && npm publish"
   },
   "devDependencies": {
     "bun-types": "latest"

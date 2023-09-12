@@ -18,6 +18,10 @@ export const build = (config: Partial<BuildConfig>) => {
 		outdir: '.',
 		...config
 	}).then(async (output) => {
+		if (!output.success) {
+			print('error');
+			process.exit(1);
+		}
 		const {path} = output.outputs[0];
 		await Bun.write(
 			path,

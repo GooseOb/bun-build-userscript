@@ -19,9 +19,9 @@ if (indexOfConfigOption === process.argv.length) {
 const config = {
 	...(indexOfConfigOption ? (await import(
 		path.resolve(process.cwd(), process.argv[indexOfConfigOption])
-	)).default : {}),
-	naming: indexOfOutputOption ?  process.argv[indexOfOutputOption] : 'dist.js'
+	)).default : {naming: 'dist.js'}),
 };
+if (indexOfOutputOption) config.naming = process.argv[indexOfOutputOption];
 
 await build(config);
 

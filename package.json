@@ -6,7 +6,7 @@
   "module": "index.ts",
   "type": "module",
   "bin": {
-    "build-userscript": "./index.ts"
+    "build-userscript": "index.ts"
   },
   "repository": {
     "type": "git",

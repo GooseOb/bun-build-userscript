@@ -30,5 +30,5 @@ if (process.argv.includes('--build')) process.exit(0);
 const watcher = watch('.');
 for await (const event of watcher) {
 	const {filename} = event;
-	if (filename === 'index.ts' || filename === 'header.txt') build(config);
+	if (filename === 'index.ts' || filename === 'header.txt') await build(config);
 }

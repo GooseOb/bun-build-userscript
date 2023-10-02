@@ -1,7 +1,7 @@
 #!/usr/bin/env bun
 
 import { watch } from "node:fs/promises"
-import { build, print } from './index.ts';
+import {build, BunBuildUserscriptConfig, print} from './index.ts';
 import * as path from 'path';
 
 let indexOfOutputOption = process.argv.indexOf('--out') + 1;
@@ -17,10 +17,13 @@ if (indexOfConfigOption === process.argv.length) {
 }
 
 const config = {
+	userscript: {
+		logErrors: process.argv.includes('--log-errors')
+	},
 	...(indexOfConfigOption ? (await import(
 		path.resolve(process.cwd(), process.argv[indexOfConfigOption])
 	)).default : {naming: 'dist.js'}),
-};
+} satisfies BunBuildUserscriptConfig;
 if (indexOfOutputOption) config.naming = process.argv[indexOfOutputOption];
 
 await build(config);

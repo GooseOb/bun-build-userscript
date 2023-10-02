@@ -32,3 +32,5 @@ Pass custom bun config
 bun build-userscript --cfg config.ts
 ```
 Should be exported by `export default`
+
+## --log-errors

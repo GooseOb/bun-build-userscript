@@ -13,7 +13,7 @@ export const print = (msg: string) => {
 
 const postprocess = (code: string) =>
 	'\n(function(){' +
-	code.replace(/(?:\\u\S{4})+/g, ($0) => JSON.parse(`"${$0}"`)) +
+	code.replace(/(?:\\u[A-Fa-f\d]{4})+/g, ($0) => JSON.parse(`"${$0}"`)) +
 	'})()';
 const addErrorLogging = (code: string) =>
 	`try{${code}}catch(e){console.log("[%cuserscript-error%c] %s","color: red","",e.toString())}`;

@@ -1,37 +1,36 @@
 #!/usr/bin/env bun
 
 import { watch } from "node:fs/promises"
-import {build, BunBuildUserscriptConfig, print} from './index.ts';
-import * as path from 'path';
+import { build, BunBuildUserscriptConfig, print } from './index.ts';
+import { resolve as resolvePath } from 'path';
 
-let indexOfOutputOption = process.argv.indexOf('--out') + 1;
-if (indexOfOutputOption === process.argv.length) {
-	print('please, specify the output path');
-	process.exit(1);
-}
+const getOptionContent = (name: string, what: string) => {
+	const index = process.argv.indexOf(name) + 1;
+	if (index === process.argv.length) {
+		print('please, specify the ' + what);
+		process.exit(1);
+	}
+	return index && process.argv[index];
+};
 
-let indexOfConfigOption = process.argv.indexOf('--cfg') + 1;
-if (indexOfConfigOption === process.argv.length) {
-	print('please, specify the config path');
-	process.exit(1);
-}
+const outputOption = getOptionContent('--out', 'output path');
+const configOption = getOptionContent('--cfg', 'config path');
 
 const config = {
 	userscript: {
 		logErrors: process.argv.includes('--log-errors')
 	},
-	...(indexOfConfigOption ? (await import(
-		path.resolve(process.cwd(), process.argv[indexOfConfigOption])
+	...(configOption ? (await import(
+		resolvePath(process.cwd(), configOption)
 	)).default : {naming: 'dist.js'}),
 } satisfies BunBuildUserscriptConfig;
-if (indexOfOutputOption) config.naming = process.argv[indexOfOutputOption];
+if (outputOption) config.naming = outputOption;
 
 await build(config);
 
 if (process.argv.includes('--build')) process.exit(0);
 
-const watcher = watch('.');
-for await (const event of watcher) {
+for await (const event of watch('.')) {
 	const {filename} = event;
 	if (filename === 'index.ts' || filename === 'header.txt') await build(config);
 }

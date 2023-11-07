@@ -2,7 +2,7 @@
 
 import { watch } from "node:fs/promises"
 import { build, BunBuildUserscriptConfig, print } from './index.ts';
-import { resolve as resolvePath } from 'path';
+import * as path from 'path';
 
 const getOptionContent = (name: string, what: string) => {
 	const index = process.argv.indexOf(name) + 1;
@@ -21,7 +21,7 @@ const config = {
 		logErrors: process.argv.includes('--log-errors')
 	},
 	...(configOption ? (await import(
-		resolvePath(process.cwd(), configOption)
+		path.resolve(process.cwd(), configOption)
 	)).default : {naming: 'dist.js'}),
 } satisfies BunBuildUserscriptConfig;
 if (outputOption) config.naming = outputOption;

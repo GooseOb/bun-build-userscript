@@ -1,5 +1,5 @@
-import {readFile} from 'node:fs/promises';
-import {BuildConfig} from 'bun';
+import { readFile } from 'node:fs/promises';
+import type { BuildConfig } from 'bun';
 
 export interface BunBuildUserscriptConfig extends BuildConfig {
 	userscript: {

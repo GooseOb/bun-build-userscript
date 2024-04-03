@@ -1,4 +1,4 @@
-## Building index.ts and header.txt into one js-file
+Building index.ts and header.txt into one js-file
 
 # Usage
 

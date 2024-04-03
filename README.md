@@ -34,3 +34,9 @@ bun build-userscript --cfg config.ts
 Should be exported by `export default`
 
 ## --log-errors
+Add error catching and printing to the console
+
+# Projects using this tool
+
+- [usos-dark](https://github.com/GooseOb/usos-dark)
+- [YT-Defaulter](https://github.com/GooseOb/YT-Defaulter)

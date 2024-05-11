@@ -19,6 +19,7 @@
     "README.md"
   ],
   "scripts": {
+    "prepare": "husky",
     "prepublishOnly": "(sed 's/\\r$//' index.ts > .tmp) && (mv .tmp index.ts)"
   },
   "dependencies": {
@@ -26,5 +27,8 @@
   },
   "peerDependencies": {
     "typescript": "^5.0.0"
+  },
+  "devDependencies": {
+    "husky": "^9.0.11"
   }
 }

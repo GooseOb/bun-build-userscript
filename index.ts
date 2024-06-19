@@ -19,30 +19,30 @@ const postprocess = (code: string) =>
 const addErrorLogging = (code: string) =>
   `try{${code}}catch(e){console.log("[%cuserscript-error%c] %s","color: red","",e.toString())}`;
 
-export const build = (config: Partial<BunBuildUserscriptConfig>) => {
+export const build = async (config: Partial<BunBuildUserscriptConfig>) => {
   const startTime = performance.now();
 
-  return Bun.build({
+  const output = await Bun.build({
     entrypoints: ["index.ts"],
     outdir: ".",
     ...config,
-  }).then(async (output) => {
-    if (!output.success) {
-      print("error");
-      process.exit(1);
-    }
-    const { path: pathName } = output.outputs[0];
-    const postprocessHeader = async (text: string) => {
-      if (!text.includes("{version}")) return text;
-      const { version } = await import(path.resolve("package.json"));
-      return text.replace(/{version}/g, version);
-    };
-    let result = postprocess(await readFile(pathName, "utf-8"));
-    if (config.userscript?.logErrors) result = addErrorLogging(result);
-    await Bun.write(
-      pathName,
-      (await readFile("header.txt", "utf-8").then(postprocessHeader)) + result,
-    );
-    print(`done in ${performance.now() - startTime} ms`);
   });
+
+  if (!output.success) {
+    print("error");
+    process.exit(1);
+  }
+  const { path: pathName } = output.outputs[0];
+
+  let result = postprocess(await readFile(pathName, "utf-8"));
+  if (config.userscript?.logErrors) result = addErrorLogging(result);
+
+  let header = await readFile("header.txt", "utf-8");
+  if (header.includes("{version}")) {
+    const { version } = await import(path.resolve("package.json"));
+    header = header.replace(/{version}/g, version);
+  }
+
+  await Bun.write(pathName, header + result);
+  print(`done in ${performance.now() - startTime} ms`);
 };

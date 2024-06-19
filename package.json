@@ -19,7 +19,6 @@
     "README.md"
   ],
   "scripts": {
-    "prepare": "husky",
     "prepublishOnly": "(sed 's/\\r$//' index.ts > .tmp) && (mv .tmp index.ts)"
   },
   "dependencies": {

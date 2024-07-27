@@ -1,4 +1,4 @@
-Building `index.ts` and `header.txt` into one js-file
+Joines `index.ts` and `header.txt` into one js-file.
 
 Replaces `{version}` in `header.txt` by `version` from `package.json`.
 
@@ -16,30 +16,33 @@ or
 ```bash
 bun add --global bun-build-userscript
 
-# watch mode
-bun build-userscript
+# watch
+build-userscript
 # build
-bun build-userscript --build
+build-userscript --build
 ```
 
 # Options
 
 ## --out
 
-Specify the output path
+Specify the output path.
 
 ```bash
-bun build-userscript --out index.js
+build-userscript --out index.js
 ```
 
 ## --cfg
 
-Pass custom bun config
+Pass custom bun config.
+Refer to `BuildUserscriptConfig` for specific usersctipt options.
 
 ```bash
-bun build-userscript --cfg config.ts
+build-userscript --cfg config.ts
 ```
 
-Should be exported by `export default`
+Should be exported with `export default`.
 
 ## --log-errors
+
+Prints errors to the browser console.

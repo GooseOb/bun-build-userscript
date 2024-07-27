@@ -2,24 +2,24 @@ import { readFile } from "node:fs/promises";
 import * as path from "node:path";
 import type { BuildConfig } from "bun";
 
-export interface BunBuildUserscriptConfig extends BuildConfig {
+export interface BuildUserscriptConfig extends BuildConfig {
   userscript: {
     logErrors: boolean;
   };
 }
 
 export const print = (msg: string) => {
-  process.stdout.write("\x1b[35m[bun-build-userscript]\x1b[0m " + msg + "\n");
+  process.stdout.write(`\x1b[35m[bun-build-userscript]\x1b[0m ${msg}\n`);
 };
 
 const postprocess = (code: string) =>
-  "\n(function(){" +
-  code.replace(/(?:\\u[A-Fa-f\d]{4})+/g, ($0) => JSON.parse(`"${$0}"`)) +
-  "})()";
+  `\n(function(){${code.replace(/(?:\\u[A-Fa-f\d]{4})+/g, ($0) =>
+    JSON.parse(`"${$0}"`),
+  )}})()`;
 const addErrorLogging = (code: string) =>
-  `try{${code}}catch(e){console.log("[%cuserscript-error%c] %s","color: red","",e.toString())}`;
+  `try{${code}}catch(e){console.error("%c   Userscript Error   \n","color:red;font-weight:bold;background:white",e)}`;
 
-export const build = async (config: Partial<BunBuildUserscriptConfig>) => {
+export const build = async (config: Partial<BuildUserscriptConfig>) => {
   const startTime = performance.now();
 
   const output = await Bun.build({
@@ -32,9 +32,10 @@ export const build = async (config: Partial<BunBuildUserscriptConfig>) => {
     print("error");
     process.exit(1);
   }
-  const { path: pathName } = output.outputs[0];
 
-  let result = postprocess(await readFile(pathName, "utf-8"));
+  const outPath = output.outputs[0].path;
+
+  let result = postprocess(await readFile(outPath, "utf-8"));
   if (config.userscript?.logErrors) result = addErrorLogging(result);
 
   let header = await readFile("header.txt", "utf-8");
@@ -43,6 +44,6 @@ export const build = async (config: Partial<BunBuildUserscriptConfig>) => {
     header = header.replace(/{version}/g, version);
   }
 
-  await Bun.write(pathName, header + result);
+  await Bun.write(outPath, header + result);
   print(`done in ${performance.now() - startTime} ms`);
 };

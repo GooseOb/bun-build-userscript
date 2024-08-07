@@ -17,7 +17,7 @@ const postprocess = (code: string) =>
     JSON.parse(`"${$0}"`),
   )}})()`;
 const addErrorLogging = (code: string) =>
-  `try{${code}}catch(e){console.error("%c   Userscript Error   \n","color:red;font-weight:bold;background:white",e)}`;
+  `try{${code}}catch(e){console.error("%c   Userscript Error   \\n","color:red;font-weight:bold;background:white",e)}`;
 
 export const build = async (config: Partial<BuildUserscriptConfig>) => {
   const startTime = performance.now();

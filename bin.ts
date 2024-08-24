@@ -4,6 +4,12 @@ import { watch } from "node:fs/promises";
 import { type BuildUserscriptConfig, build, print } from "./index.ts";
 import * as path from "path";
 
+const firstArg = process.argv[2];
+if (firstArg === "--version" || firstArg === "-v") {
+  print((await import(path.join(import.meta.dir, "package.json"))).version);
+  process.exit(0);
+}
+
 const getOptionContent = (name: string, what: string) => {
   const index = process.argv.indexOf(name) + 1;
   if (index === process.argv.length) {

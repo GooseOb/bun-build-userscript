@@ -3,8 +3,8 @@ import * as path from "node:path";
 import type { BuildConfig } from "bun";
 
 export interface BuildUserscriptConfig extends BuildConfig {
-  userscript: {
-    logErrors: boolean;
+  userscript?: {
+    logErrors?: boolean;
   };
 }
 
@@ -19,10 +19,11 @@ const postprocess = (code: string) =>
 const addErrorLogging = (code: string) =>
   `try{${code}}catch(e){console.error("%c   Userscript Error   \\n","color:red;font-weight:bold;background:white",e)}`;
 
-export const build = async (config: Partial<BuildUserscriptConfig>) => {
+export const build = async (config: BuildUserscriptConfig) => {
   const startTime = performance.now();
 
   const output = await Bun.build({
+    // @ts-expect-error
     entrypoints: ["index.ts"],
     outdir: ".",
     ...config,
@@ -36,7 +37,9 @@ export const build = async (config: Partial<BuildUserscriptConfig>) => {
   const outPath = output.outputs[0].path;
 
   let result = postprocess(await readFile(outPath, "utf-8"));
-  if (config.userscript?.logErrors) result = addErrorLogging(result);
+  if (config.userscript?.logErrors) {
+    result = addErrorLogging(result);
+  }
 
   let header = await readFile("header.txt", "utf-8");
   if (header.includes("{version}")) {

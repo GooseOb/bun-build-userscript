@@ -5,6 +5,7 @@ import type { BuildConfig } from "bun";
 export interface BuildUserscriptConfig extends BuildConfig {
   userscript?: {
     logErrors?: boolean;
+    clearTerminal?: boolean;
   };
 }
 
@@ -48,5 +49,8 @@ export const build = async (config: BuildUserscriptConfig) => {
   }
 
   await Bun.write(outPath, header + result);
+  if (config.userscript!.clearTerminal) {
+    process.stdout.write("\x1b[2J\x1b[0;0H");
+  }
   print(`done in ${performance.now() - startTime} ms`);
 };

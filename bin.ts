@@ -22,20 +22,26 @@ const getOptionContent = (name: string, what: string) => {
 const outputOption = getOptionContent("--out", "output path");
 const configOption = getOptionContent("--cfg", "config path");
 
+const isBuild = !process.argv.includes("--watch");
+
+const userConfig =
+  configOption &&
+  (await import(path.resolve(process.cwd(), configOption))).default;
+
 const config = {
+  naming: "dist.js",
+  ...userConfig,
   userscript: {
     logErrors: process.argv.includes("--log-errors"),
+    clearTerminal: !(isBuild || process.argv.includes("--no-clear")),
+    ...userConfig?.userscript,
   },
-  naming: "dist.js",
-  ...(configOption &&
-    (await import(path.resolve(process.cwd(), configOption))).default),
-  ...(outputOption && { naming: outputOption }),
 } satisfies BuildUserscriptConfig;
 if (outputOption) config.naming = outputOption;
 
 await build(config);
 
-if (process.argv.includes("--build")) process.exit(0);
+if (isBuild) process.exit(0);
 
 for await (const event of watch(".")) {
   const { filename } = event;

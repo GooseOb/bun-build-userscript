@@ -6,6 +6,7 @@ export interface BuildUserscriptConfig extends BuildConfig {
   userscript?: {
     logErrors?: boolean;
     clearTerminal?: boolean;
+    transform?: (code: string) => string;
   };
 }
 
@@ -38,7 +39,11 @@ export const build = async (config: BuildUserscriptConfig) => {
   const outPath = output.outputs[0].path;
 
   let result = postprocess(await readFile(outPath, "utf-8"));
-  if (config.userscript?.logErrors) {
+  const uscfg = config.userscript || {};
+  if (uscfg.transform) {
+    result = uscfg.transform(result);
+  }
+  if (uscfg.logErrors) {
     result = addErrorLogging(result);
   }
 
@@ -49,7 +54,7 @@ export const build = async (config: BuildUserscriptConfig) => {
   }
 
   await Bun.write(outPath, header + result);
-  if (config.userscript!.clearTerminal) {
+  if (uscfg.clearTerminal) {
     process.stdout.write("\x1b[2J\x1b[0;0H");
   }
   print(`done in ${performance.now() - startTime} ms`);

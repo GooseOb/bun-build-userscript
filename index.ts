@@ -10,8 +10,8 @@ export interface BuildUserscriptConfig extends BuildConfig {
   };
 }
 
-export const print = (msg: string) => {
-  process.stdout.write(`\x1b[35m[bun-build-userscript]\x1b[0m ${msg}\n`);
+export const print = (msg: string, writer = process.stdout) => {
+  writer.write(`\x1b[35m[bun-build-userscript]\x1b[0m ${msg}\n`);
 };
 
 const postprocess = (code: string) =>
@@ -32,7 +32,7 @@ export const build = async (config: BuildUserscriptConfig) => {
   });
 
   if (!output.success) {
-    print("error");
+    print("error\n" + output.logs, process.stderr);
     process.exit(1);
   }
 

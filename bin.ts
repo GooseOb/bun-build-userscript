@@ -29,7 +29,7 @@ const userConfig =
   (await import(path.resolve(process.cwd(), configOption))).default;
 
 const config = {
-  naming: "dist.js",
+  naming: "script.user.js",
   ...userConfig,
   userscript: {
     logErrors: process.argv.includes("--log-errors"),

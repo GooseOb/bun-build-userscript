@@ -19,14 +19,13 @@ const getArgValue = (name: string, what: string) => {
   return index && process.argv[index];
 };
 
-const outputOption = getArgValue("--out", "output path");
-const configOption = getArgValue("--cfg", "config path");
+const outputPath = getArgValue("--out", "output path");
+const configPath = getArgValue("--cfg", "config path");
 
 const isBuild = !process.argv.includes("--watch");
 
 const userConfig =
-  configOption &&
-  (await import(path.resolve(process.cwd(), configOption))).default;
+  configPath && (await import(path.resolve(process.cwd(), configPath))).default;
 
 const config = {
   naming: "script.user.js",
@@ -37,7 +36,7 @@ const config = {
     ...userConfig?.userscript,
   },
 } satisfies BuildUserscriptConfig;
-if (outputOption) config.naming = outputOption;
+if (outputPath) config.naming = outputPath;
 
 await build(config);
 

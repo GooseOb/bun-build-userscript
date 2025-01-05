@@ -13,7 +13,7 @@ if (firstArg === "--version" || firstArg === "-v") {
 const getArgValue = (name: string, what: string) => {
   const index = process.argv.indexOf(name) + 1;
   if (index === process.argv.length) {
-    print("please, specify the " + what);
+    print(`Missing [${what}] after ${name}`, process.stderr);
     process.exit(1);
   }
   return index && process.argv[index];

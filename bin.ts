@@ -10,7 +10,7 @@ if (firstArg === "--version" || firstArg === "-v") {
   process.exit(0);
 }
 
-const getOptionContent = (name: string, what: string) => {
+const getArgValue = (name: string, what: string) => {
   const index = process.argv.indexOf(name) + 1;
   if (index === process.argv.length) {
     print("please, specify the " + what);
@@ -19,8 +19,8 @@ const getOptionContent = (name: string, what: string) => {
   return index && process.argv[index];
 };
 
-const outputOption = getOptionContent("--out", "output path");
-const configOption = getOptionContent("--cfg", "config path");
+const outputOption = getArgValue("--out", "output path");
+const configOption = getArgValue("--cfg", "config path");
 
 const isBuild = !process.argv.includes("--watch");
 

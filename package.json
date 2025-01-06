@@ -1,29 +1,29 @@
 {
-  "name": "bun-build-userscript",
-  "version": "2.1.1",
-  "author": "GooseOb",
-  "description": "Building index.ts and header.txt into one js-file via bun",
-  "type": "module",
-  "main": "src/index.ts",
-  "bin": {
-    "build-userscript": "src/bin.ts"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/GooseOb/bun-build-userscript.git"
-  },
-  "files": [
-    "src",
-    "README.md",
-    "LICENSE.txt"
-  ],
-  "dependencies": {
-    "bun-types": "latest"
-  },
-  "peerDependencies": {
-    "typescript": "^5.7.2"
-  },
-  "devDependencies": {
-    "husky": "^9.1.7"
-  }
+	"name": "bun-build-userscript",
+	"version": "2.1.2",
+	"author": "GooseOb",
+	"description": "Building index.ts and header.txt into one js-file via bun",
+	"type": "module",
+	"main": "src/index.ts",
+	"bin": {
+		"build-userscript": "src/bin.ts"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/GooseOb/bun-build-userscript.git"
+	},
+	"files": [
+		"src",
+		"README.md",
+		"LICENSE.txt"
+	],
+	"dependencies": {
+		"bun-types": "latest"
+	},
+	"peerDependencies": {
+		"typescript": "^5.7.2"
+	},
+	"devDependencies": {
+		"husky": "^9.1.7"
+	}
 }

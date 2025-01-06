@@ -64,9 +64,9 @@ if (isBuild) process.exit(0);
 entryPath ||= cfg.userscript.entry!;
 headerPath ||= cfg.userscript.header!;
 
-console.log(entryPath);
-
 const delay = +getArg("--delay", "delay between change and build")! || 100;
+
+print(`Watching for changes in ${entryPath} and ${headerPath}`);
 
 let isBuilding = false;
 for await (const event of watch(".", { recursive: true })) {

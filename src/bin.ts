@@ -39,8 +39,11 @@ const isBuild = !process.argv.includes("--watch");
 
 if (process.argv.includes("--log-errors")) cfg.userscript.logErrors = true;
 
-if (isBuild || process.argv.includes("--no-clear"))
+if (isBuild || process.argv.includes("--no-clear")) {
   cfg.userscript.clearTerminal = false;
+} else {
+  cfg.userscript.clearTerminal ??= true;
+}
 
 let headerPath = getPathArg("--header", "header");
 if (headerPath) cfg.userscript.header = headerPath;

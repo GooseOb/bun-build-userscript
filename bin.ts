@@ -59,6 +59,7 @@ if (isBuild) process.exit(0);
 const delay = +getArg("--delay", "delay between change and build")! || 100;
 
 for await (const event of watch(".", { recursive: true })) {
+  if (!event.filename) continue;
   const path = resolve(event.filename);
   if (path.startsWith(srcPath) || path === headerPath) {
     setTimeout(() => {

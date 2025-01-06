@@ -35,7 +35,7 @@ export class UserScriptConfig {
   /*
    * Execute before building
    */
-  before?: (cfgs: BuildConfigs) => void | Promise<void>;
+  before?: (cfgs: CompleteBuildConfigs) => void | Promise<void>;
 
   constructor(config?: Partial<UserScriptConfig>) {
     if (config) {
@@ -60,9 +60,13 @@ const postprocess = (code: string) =>
 const addErrorLogging = (code: string) =>
   `try{${code}}catch(e){console.error("%c   Userscript Error   \\n","color:red;font-weight:bold;background:white",e)}`;
 
+type CompleteBuildConfigs = {
+  bun: BuildConfig;
+  userscript: UserScriptConfig;
+};
+
 export type BuildConfigs = {
-  bun?: Partial<BuildConfig>;
-  userscript?: Partial<UserScriptConfig>;
+  [P in keyof CompleteBuildConfigs]?: Partial<CompleteBuildConfigs[P]>;
 };
 
 export const build = async ({
@@ -71,19 +75,21 @@ export const build = async ({
 }: BuildConfigs) => {
   const startTime = performance.now();
 
-  const uscfg: UserScriptConfig =
+  const userscript: UserScriptConfig =
     userscriptConfig instanceof UserScriptConfig
       ? userscriptConfig
       : new UserScriptConfig(userscriptConfig);
 
-  await uscfg.before?.({ bun: bunConfig, userscript: uscfg });
-
-  const output = await Bun.build({
-    entrypoints: [uscfg.entry],
+  const bun = {
+    entrypoints: [userscript.entry],
     naming: "script.user.js",
     outdir: ".",
     ...bunConfig,
-  });
+  };
+
+  await userscript.before?.({ bun, userscript });
+
+  const output = await Bun.build(bun);
 
   if (!output.success) {
     print("error\n" + output.logs, process.stderr);
@@ -93,21 +99,21 @@ export const build = async ({
   const outPath = output.outputs[0].path;
 
   let result = postprocess(await readFile(outPath, "utf-8"));
-  if (uscfg.transform) {
-    result = uscfg.transform(result);
+  if (userscript.transform) {
+    result = userscript.transform(result);
   }
-  if (uscfg.logErrors) {
+  if (userscript.logErrors) {
     result = addErrorLogging(result);
   }
 
-  let header = await readFile(uscfg.header, "utf-8");
+  let header = await readFile(userscript.header, "utf-8");
   if (header.includes("{version}")) {
     const { version } = await import(resolve("package.json"));
     header = header.replace(/{version}/g, version);
   }
 
   await Bun.write(outPath, header + result);
-  if (uscfg.clearTerminal) {
+  if (userscript.clearTerminal) {
     process.stdout.write("\x1b[2J\x1b[0;0H");
   }
   print(`done in ${performance.now() - startTime} ms`);

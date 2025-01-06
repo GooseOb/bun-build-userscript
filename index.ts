@@ -64,7 +64,7 @@ const addErrorLogging = (code: string) =>
   `try{${code}}catch(e){console.error("%c   Userscript Error   \\n","color:red;font-weight:bold;background:white",e)}`;
 
 export type BuildConfigs = {
-  bun?: BuildConfig;
+  bun?: Partial<BuildConfig>;
   userscript?: Partial<UserScriptConfig>;
 };
 

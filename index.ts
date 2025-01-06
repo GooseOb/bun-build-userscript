@@ -1,6 +1,7 @@
 import { readFile } from "node:fs/promises";
 import { resolve } from "node:path";
 import type { BuildConfig } from "bun";
+import { print } from "./print";
 
 export class UserScriptConfig {
   /*
@@ -50,10 +51,6 @@ export class UserScriptConfig {
     }
   }
 }
-
-export const print = (msg: string, writer = process.stdout) => {
-  writer.write(`\x1b[35m[bun-build-userscript]\x1b[0m ${msg}\n`);
-};
 
 const postprocess = (code: string) =>
   `\n(function(){${code.replace(/(?:\\u[A-Fa-f\d]{4})+/g, ($0) =>

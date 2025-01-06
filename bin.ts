@@ -1,8 +1,9 @@
 #!/usr/bin/env bun
 
 import { watch } from "node:fs/promises";
-import { BuildConfigs, UserScriptConfig, build, print } from "./index.ts";
 import { join, resolve } from "path";
+import { type BuildConfigs, UserScriptConfig, build } from "./index.ts";
+import { print } from "./print.ts";
 
 const firstArg = process.argv[2];
 if (firstArg === "--version" || firstArg === "-v") {

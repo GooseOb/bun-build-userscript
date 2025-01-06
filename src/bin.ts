@@ -68,11 +68,14 @@ console.log(entryPath);
 
 const delay = +getArg("--delay", "delay between change and build")! || 100;
 
+let isBuilding = false;
 for await (const event of watch(".", { recursive: true })) {
-  if (!event.filename) continue;
+  if (isBuilding || !event.filename) continue;
   const path = resolve(event.filename);
   if (path.startsWith(entryPath!) || path === headerPath) {
+    isBuilding = true;
     setTimeout(() => {
+      isBuilding = false;
       build(cfg).catch(console.error);
     }, delay);
   }

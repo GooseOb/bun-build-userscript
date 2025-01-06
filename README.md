@@ -113,9 +113,17 @@ build-userscript --out index.js
 
 Do print errors to the browser console.
 
-Default: only in watch mode
+Default: `false`
 
 Config: `bun.logErrors`
+
+Recommended:
+
+```ts
+{
+  logErrors: !process.argv.includes("--build"),
+}
+```
 
 ## --no-clear
 

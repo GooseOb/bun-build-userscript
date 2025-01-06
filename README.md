@@ -59,7 +59,7 @@ Path to your config.
 
 ```bash
 build-userscript --cfg my_config.ts
-# JavaScript also supported
+# JavaScript is also supported
 build-userscript --cfg my_config.js
 ```
 
@@ -69,9 +69,9 @@ Example config:
 // EXPORTING BOTH `userscript` AND `bun` IS OPTIONAL.
 // ALL OPTIONS ARE OPTIONAL
 
-import { type BuildConfigs, UserScriptConfig } from "bun-build-userscript";
+import type { BuildConfigs } from "bun-build-userscript";
 
-export const userscript = new UserScriptConfig({
+export const userscript: BuildConfigs['userscript'] = {
   // may be useful in watch mode
   before: async ({ bun, userscript }) => {
     // you can add additional entrypoints
@@ -85,7 +85,7 @@ export const userscript = new UserScriptConfig({
   clearTerminal: !(isBuild || process.argv.includes("--no-clear")),
   header: getArg("--header") || "header.txt",
   entry: getArg("--entry") ||  "index.ts",
-});
+};
 
 // BuildConfigs["bun"] is an alias to import("bun").BuildConfig
 export const bun: BuildConfigs["bun"] = {
@@ -95,15 +95,6 @@ export const bun: BuildConfigs["bun"] = {
   naming: "script.user.js",
   outdir: ".",
 };
-
-// if you're exporting both, this might be more convenient
-import type { BuildConfigs } from "bun-build-userscript";
-
-module.exports = {
-  bun: { ... },
-  userscript: { ... }
-} satisfies BuildConfigs;
-
 ```
 
 ## --out

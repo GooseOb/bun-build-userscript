@@ -1,56 +1,8 @@
 import { readFile } from "node:fs/promises";
 import { resolve } from "node:path";
-import type { BuildConfig } from "bun";
 import { print } from "./print";
-
-export class UserScriptConfig {
-  /*
-   * Do add a try catch block to the script to log errors to the console
-   */
-  logErrors: boolean = false;
-  /*
-   * Do clear the terminal after building in watch mode
-   */
-  clearTerminal: boolean = false;
-  /*
-   * Path to the header file
-   *
-   * If assigned beyond the constructor, should be an absolute path
-   *
-   * @default ./header.txt
-   */
-  header: string = resolve("header.txt");
-  /*
-   * Path to the entry file or directory (if passed a directory, index.ts is used, but all files are watched in watch mode)
-   *
-   * If assigned beyond the constructor, should be an absolute path
-   *
-   * @default ./index.ts
-   */
-  entry: string = resolve("index.ts");
-  /*
-   * Transform the code after building
-   */
-  transform?: (code: string) => string;
-  /*
-   * Execute before building
-   */
-  before?: (cfgs: CompleteBuildConfigs) => void | Promise<void>;
-
-  constructor(config?: Partial<UserScriptConfig>) {
-    if (config) {
-      if (config.header) this.header = resolve(config.header);
-      if (config.entry)
-        this.entry = config.entry.endsWith(".ts")
-          ? resolve(config.entry)
-          : resolve(config.entry, "index.ts");
-      if (config.transform) this.transform = config.transform;
-      if (config.logErrors) this.logErrors = config.logErrors;
-      if (config.clearTerminal) this.clearTerminal = config.clearTerminal;
-      if (config.before) this.before = config.before;
-    }
-  }
-}
+import { type BuildConfigs, UserScriptConfig } from "./config";
+export type { BuildConfigs } from "./config";
 
 const postprocess = (code: string) =>
   `\n(function(){${code.replace(/(?:\\u[A-Fa-f\d]{4})+/g, ($0) =>
@@ -59,15 +11,6 @@ const postprocess = (code: string) =>
 
 const addErrorLogging = (code: string) =>
   `try{${code}}catch(e){console.error("%c   Userscript Error   \\n","color:red;font-weight:bold;background:white",e)}`;
-
-type CompleteBuildConfigs = {
-  bun: BuildConfig;
-  userscript: UserScriptConfig;
-};
-
-export type BuildConfigs = {
-  [P in keyof CompleteBuildConfigs]?: Partial<CompleteBuildConfigs[P]>;
-};
 
 export const build = async ({
   bun: bunConfig,

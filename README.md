@@ -95,6 +95,15 @@ export const bun: BuildConfigs["bun"] = {
   naming: "script.user.js",
   outdir: ".",
 };
+
+// if you're exporting both, this might be more convenient
+import type { BuildConfigs } from "bun-build-userscript";
+
+module.exports = {
+  bun: { ... },
+  userscript: { ... }
+} satisfies BuildConfigs;
+
 ```
 
 ## --out

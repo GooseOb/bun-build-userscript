@@ -1,35 +1,35 @@
 {
-	"name": "bun-build-userscript",
-	"version": "2.0.4",
-	"author": "GooseOb",
-	"description": "Building index.ts and header.txt into one js-file via bun",
-	"module": "index.ts",
-	"type": "module",
-	"main": "index.ts",
-	"bin": {
-		"build-userscript": "bin.ts"
-	},
-	"repository": {
-		"type": "git",
-		"url": "git+https://github.com/GooseOb/bun-build-userscript.git"
-	},
-	"files": [
-		"index.ts",
-		"index.bin",
-		"print.ts",
-		"tsconfig.json",
-		"README.md"
-	],
-	"scripts": {
-		"prepublishOnly": "(sed 's/\\r$//' index.ts > .tmp) && (mv .tmp index.ts)"
-	},
-	"dependencies": {
-		"bun-types": "latest"
-	},
-	"peerDependencies": {
-		"typescript": "^5.7.2"
-	},
-	"devDependencies": {
-		"husky": "^9.1.7"
-	}
+  "name": "bun-build-userscript",
+  "version": "2.0.4",
+  "author": "GooseOb",
+  "description": "Building index.ts and header.txt into one js-file via bun",
+  "module": "index.ts",
+  "type": "module",
+  "main": "index.ts",
+  "bin": {
+    "build-userscript": "bin.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GooseOb/bun-build-userscript.git"
+  },
+  "files": [
+    "index.ts",
+    "bin.ts",
+    "print.ts",
+    "tsconfig.json",
+    "README.md"
+  ],
+  "scripts": {
+    "prepublishOnly": "(sed 's/\\r$//' index.ts > .tmp) && (mv .tmp index.ts)"
+  },
+  "dependencies": {
+    "bun-types": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5.7.2"
+  },
+  "devDependencies": {
+    "husky": "^9.1.7"
+  }
 }

@@ -1,5 +1,14 @@
 import { resolve } from "path";
 import type { BuildConfig } from "bun";
+import { existsSync } from "fs";
+
+const lookForFile = (name: string) => {
+  for (const dir of [".", "src"]) {
+    let path = resolve(dir, name);
+    if (existsSync(path)) return path;
+  }
+  throw new Error(`Could not find ${name}`);
+};
 
 type CompleteBuildConfigs = {
   bun: BuildConfig;
@@ -26,7 +35,7 @@ export class UserScriptConfig {
    *
    * @default ./header.txt
    */
-  header: string = resolve("header.txt");
+  header: string;
   /*
    * Path to the entry file or directory (if passed a directory, index.ts is used, but all files are watched in watch mode)
    *
@@ -34,7 +43,7 @@ export class UserScriptConfig {
    *
    * @default ./index.ts
    */
-  entry: string = resolve("index.ts");
+  entry: string;
   /*
    * Transform the code after building
    */
@@ -56,5 +65,7 @@ export class UserScriptConfig {
       if (config.clearTerminal) this.clearTerminal = config.clearTerminal;
       if (config.before) this.before = config.before;
     }
+    this.entry ||= lookForFile("index.ts");
+    this.header ||= lookForFile("header.txt");
   }
 }

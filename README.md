@@ -137,7 +137,7 @@ Config: `userscript.clearTerminal`
 
 Path to your header file.
 
-Default: `header.txt`
+Default: `header.txt` or `src/header.txt`
 
 Config: `userscript.header`
 
@@ -148,7 +148,7 @@ Path to your source file/dir.
 If it's a directory, entry point is resolved to `index.ts`
 in this directory, but all files are watched in watch mode.
 
-Default: `index.ts`
+Default: `index.ts` or `src/index.ts`
 
 Config: `userscript.entry`
 

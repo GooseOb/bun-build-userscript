@@ -69,7 +69,7 @@ headerPath ||= cfg.userscript.header!;
 
 const delay = +getArg("--delay", "delay between change and build")! || 100;
 
-print(`Watching for changes in ${entryPath} and ${headerPath}`);
+print(`Watching for changes:\n${entryPath}\n${headerPath}`);
 
 let isBuilding = false;
 for await (const event of watch(".", { recursive: true })) {

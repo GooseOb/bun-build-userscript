@@ -2,7 +2,7 @@ import { resolve } from "path";
 import type { BuildConfig } from "bun";
 import { existsSync } from "fs";
 
-const lookForFile = (name: string) => {
+const findFile = (name: string) => {
   for (const dir of [".", "src"]) {
     let path = resolve(dir, name);
     if (existsSync(path)) return path;
@@ -65,7 +65,7 @@ export class UserScriptConfig {
       if (config.clearTerminal) this.clearTerminal = config.clearTerminal;
       if (config.before) this.before = config.before;
     }
-    this.entry ||= lookForFile("index.ts");
-    this.header ||= lookForFile("header.txt");
+    this.entry ||= findFile("index.ts");
+    this.header ||= findFile("header.txt");
   }
 }
